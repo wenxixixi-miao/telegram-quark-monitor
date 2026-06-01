@@ -1,0 +1,22 @@
+# 配置文件（包含敏感信息）
+monitor_config.json
+quark_config.json
+cookies.json
+
+# Session 文件
+quark_monitor.session
+quark_monitor.session-journal
+quark_search.session
+
+# 运行时生成的文件
+processed_messages.json
+keyword_dedup.json
+notify_queue.json
+search_result.json
+search_command.txt
+monitor.log
+__pycache__/
+
+# 原项目文件（如果是 fork）
+*.session
+*.session-journal

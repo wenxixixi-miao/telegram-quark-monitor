@@ -1,0 +1,15 @@
+{
+    "api_id": 12345678,
+    "api_hash": "your_api_hash_here",
+    "phone": "+86xxxxxxxxxxx",
+    "channels": [
+        "Quark_Movies"
+    ],
+    "save_path": "/自动转存",
+    "keywords": [
+        "斗破苍穹",
+        "绝世唐门",
+        "斗罗大陆"
+    ],
+    "dedup_days": 5
+}
