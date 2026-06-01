@@ -2,7 +2,13 @@
 
 监听 Telegram 频道消息，自动匹配关键字并转存夸克网盘。
 
-基于 [Cp0204/quark-auto-save](https://github.com/Cp0204/quark-auto-save) 扩展。
+## 🙏 致谢
+
+本项目基于 [Cp0204/quark-auto-save](https://github.com/Cp0204/quark-auto-save) 扩展开发。
+
+原项目提供夸克网盘自动转存核心功能，本项目在其基础上增加了 Telegram 频道实时监听、关键字过滤、去重等能力。
+
+> 原项目协议: AGPL-3.0 | 本项目协议: MIT（本项目代码部分）
 
 ## 功能
 
@@ -18,8 +24,8 @@
 ## 安装
 
 ```bash
-# 克隆项目（需同时有 quark-auto-save 主项目）
-git clone https://github.com/your-username/telegram-quark-monitor.git
+# 克隆项目
+git clone https://github.com/wenxixixi-miao/telegram-quark-monitor.git
 cd telegram-quark-monitor
 
 # 安装依赖
@@ -137,4 +143,6 @@ with open(QUEUE_FILE, "w", encoding="utf-8") as f:
 
 ## License
 
-MIT
+MIT License - 详见 [LICENSE](LICENSE)
+
+本项目基于 [Cp0204/quark-auto-save](https://github.com/Cp0204/quark-auto-save)（AGPL-3.0）扩展开发。
