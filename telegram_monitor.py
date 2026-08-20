@@ -198,16 +198,8 @@ def do_quark_save(share_url, save_subdir=""):
         if save_subdir:
             target_path = f"{SAVE_PATH}/{save_subdir}"
 
-        # 检测旧文件夹，有则删除
-        if save_subdir:
-            existing = account.get_fids([target_path])
-            if existing:
-                old_fid = existing[0]["fid"]
-                old_name = existing[0]["file_name"]
-                log.info(f"🗑️ 发现旧文件夹: {old_name}，准备删除...")
-                account.delete([old_fid])
-                log.info(f"🗑️ 旧文件夹已删除: {old_name}")
-
+        # 不再先删除旧文件夹（原逻辑先删后存，一旦转存失败旧文件也全没了）。
+        # 改为靠 do_save_task 的增量"追更"：只保存新文件，已存在的跳过，绝不丢已有文件。
         log.info(f"🔄 正在转存: {share_url}")
         log.info(f"📁 保存到: {target_path}")
 
@@ -220,7 +212,13 @@ def do_quark_save(share_url, save_subdir=""):
             "enddate": "2099-01-30",
             "addition": {},
         }
-        account.do_save_task(task)
+        # 必须检查返回值：do_save_task 返回 None(失败)/False(无新任务)/树(成功)。
+        # 原代码无视返回值，失败也报"转存完成"，导致"收到成功通知但网盘没文件"。
+        result = account.do_save_task(task)
+        if not result:
+            reason = task.get("shareurl_ban") or "没有新的转存任务（文件已存在或分享失效）"
+            log.error(f"❌ 转存失败: {reason}")
+            return False
         log.info(f"✅ 转存完成: {share_url}")
 
         # 自动修正非视频后缀为 .mp4
