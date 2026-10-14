@@ -20,3 +20,10 @@ __pycache__/
 # 原项目文件（如果是 fork）
 *.session
 *.session-journal
+
+# 其他敏感/临时文件
+cookie_string.txt
+cookies*.json
+*.bak
+*.bak.*
+keyword_dedup.json.bak*

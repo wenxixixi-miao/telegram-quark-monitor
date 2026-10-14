@@ -16,6 +16,10 @@
 - 🔑 关键字过滤，只转存匹配的资源
 - 🔗 自动提取夸克网盘链接并转存
 - ⏭️ 同名去重：同一关键字 N 天内已转存过则跳过
+- 🔓 **空窗期**：上一次成功转存的那一天全天不再冷却（当天再检测到就转存），跨零点恢复 N 天冷却
+- 🧹 **冷却期结束后的首次转存**：先清空该资源目录下的旧文件夹再存（本轮首次），当天后续转存不再清理
+- 🔇 **静默规则**：当天第 2 次及以后的转存不再推送通知；夸克回「没有新的转存任务」也不算失败、不发通知
+- 🛡️ **转存准入规则**：拦「短剧更新目录」这类合集帖——① 只看标题行命中排除词；② 内容守卫（分享根目录多剧并列且无剧集命名）；判不准时放行，宁可多存不误拦
 - 🔧 自动修正非视频后缀（大文件重命名为 .mp4）
 - 🔍 支持搜索频道历史消息
 - 📢 转存结果通知队列（可对接 Hermes Agent 推送）
@@ -53,6 +57,9 @@ cp monitor_config.example.json monitor_config.json
 }
 ```
 
+> 脚本里**不硬编码任何凭据**，`api_id` / `api_hash` / `phone` / `keywords` / `dedup_days` 全部从 `monitor_config.json` 读取
+> （该文件已加入 `.gitignore`，不会被提交）。
+
 ### 获取 Telegram API 凭据
 
 1. 访问 https://my.telegram.org
@@ -67,6 +74,13 @@ python telegram_monitor.py
 ```
 
 首次运行需要输入 Telegram 验证码，之后 session 会自动保存。
+
+## 依赖的上游补丁（quark_auto_save.py）
+
+本项目调用上游 `quark_auto_save.py` 的 `do_save_task()`，建议同步打上以下两处补丁（否则容易出现「文件存不进子文件夹」）：
+
+1. **保留分享里的文件夹名**：分享根目录只有一个文件夹时，展开后把文件夹名拼进保存路径，而不是把文件平铺到目标目录；
+2. **目标目录不存在时自动创建**：`savepath` 的 fid 获取失败时先 `mkdir` 再存，而不是直接跳过转存。
 
 ## 搜索历史消息
 
@@ -136,7 +150,7 @@ with open(QUEUE_FILE, "w", encoding="utf-8") as f:
 
 ```yaml
 - name: quark-monitor-notify
-  schedule: "every 2m"
+  schedule: "every 5m"
   script: check_notify.py
   no_agent: true
 ```
