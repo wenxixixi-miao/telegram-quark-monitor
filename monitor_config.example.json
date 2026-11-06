@@ -2,14 +2,10 @@
     "api_id": 12345678,
     "api_hash": "your_api_hash_here",
     "phone": "+86xxxxxxxxxxx",
+    "session": "quark_monitor",
     "channels": [
-        "Quark_Movies"
+        "YourChannelName"
     ],
-    "save_path": "/自动转存",
-    "keywords": [
-        "斗破苍穹",
-        "绝世唐门",
-        "斗罗大陆"
-    ],
-    "dedup_days": 5
+    "dry_run": true,
+    "comment": "TG 发现器配置：api_id/api_hash 去 my.telegram.org 申请；channels 填频道用户名（不带 @）"
 }

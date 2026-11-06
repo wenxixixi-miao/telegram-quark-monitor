@@ -4,6 +4,40 @@
 
 格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.0.0/)。
 
+## [2.0.0] - 2026-11-06
+
+**新架构（v2 pipeline）**，与 1.x 的单体监听器是两套实现，`main` 分支保留 1.x 版本。
+
+### 架构
+
+- **拆分为发现器与入库器**：`tg_discover.py` 只负责发现/验活/登记事件，`intake.py` 是唯一写网盘的入口，
+  两者通过 append-only 事件队列 `tg_events.jsonl` 连接。
+- **从「看到就存」改为「按缺集增量入库」**：解析季号集号后与目标目录已有集求差集，只存缺的；
+  同一集多个来源时按画质打分选优。
+- **事件可重放**：支持 `--from-scratch` 完整重放历史事件，落盘幂等。
+- **默认 dry-run**：发现器与入库器不显式加 `--live` / `--apply` 时只打印计划，绝不写网盘；
+  整条链路没有任何删除操作。
+- **严格静默的通知**：只有真正存入、失败、或出现新的待确认集才输出，其余轮次静默。
+
+### 新增脚本
+
+- `episode_parse.py` 集号/季号解析、`quality.py` 画质打分、`resolve_series.py` 剧名归一、
+  `add_show.py` 加剧名库、`build_canonical.py` 从网盘目录反推剧名库、`pending_apply.py` 待确认集处理、
+  `airing_audit.py` 播出审计、`guard_replay.py` 重放护栏、`llm_recognize.py` / `llm_title_resolve.py` LLM 辅助、
+  `newshow.py` 新剧候选、`tg_search.py` 历史消息搜索。
+
+### 配置与可移植性
+
+- 新增 `lib/paths.py`：原先散落在各脚本里的绝对路径全部集中配置，支持 `TQM_*` 环境变量覆盖，
+  默认数据目录为 `~/.telegram-quark-monitor/`。
+- 新增 `monitor_config.example.json`、`canonical.example.json`、`env.example`。
+
+### 未包含
+
+- Jellyfin / strm 媒体库同步、按播放状态延后画质升级等私有链路不在本仓库内。
+
+---
+
 ## [1.2.0] - 2026-10-14
 
 ### 新增

@@ -1,0 +1,24 @@
+{
+    "示例剧名": {
+        "canonical": "示例剧名",
+        "title": "示例剧名",
+        "year": "2024",
+        "tmdb_id": 123456,
+        "kind": "tv",
+        "seasons": [
+            {
+                "n": 1,
+                "eps": 12
+            }
+        ],
+        "total_eps": 12,
+        "dirs": [
+            "示例剧名"
+        ],
+        "aliases": [
+            "示例剧名",
+            "EXAMPLE"
+        ],
+        "added_by": "manual"
+    }
+}

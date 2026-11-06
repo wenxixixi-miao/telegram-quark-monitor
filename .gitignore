@@ -1,29 +1,26 @@
-# 配置文件（包含敏感信息）
+# 本地配置与凭据（正常都在数据目录里，这里兜底）
 monitor_config.json
 quark_config.json
-cookies.json
+cookies*.json
+.env
+env/
 
-# Session 文件
-quark_monitor.session
-quark_monitor.session-journal
-quark_search.session
-
-# 运行时生成的文件
-processed_messages.json
-keyword_dedup.json
-notify_queue.json
-search_result.json
-search_command.txt
-monitor.log
+# 状态与运行时产物
+state/
+*.jsonl
+*.log
 __pycache__/
+*.pyc
 
-# 原项目文件（如果是 fork）
+# Telegram session
 *.session
 *.session-journal
 
-# 其他敏感/临时文件
-cookie_string.txt
-cookies*.json
+# 临时文件
 *.bak
 *.bak.*
-keyword_dedup.json.bak*
+.DS_Store
+# 个人数据（片单/别名/TMDB 映射）
+aliases.json
+tmdb_final.json
+canonical.json
